@@ -1,6 +1,7 @@
 import copy
 import math
 import random
+import csv
 
 class Genotype():
     def __init__(self):
@@ -101,7 +102,9 @@ class Environment():
     #         print ("   ")
 
 if __name__ == '__main__':
-    epochs = 200
+    epochs = 50
+    resultsEnv = []
+    resultsBest = []
     env = Environment(50, 15, 30)
     env.sort()
     for i in range (epochs):
@@ -109,5 +112,12 @@ if __name__ == '__main__':
         env.crossover()
         env.mutation()
         print(env.loss())
+        resultsEnv.append(env.loss())
+        resultsBest.append(env.population[0])
     print(env.population[0])
     print(env.lossTop())
+    with open('lambdaMi.csv', mode='w') as file:
+        writer = csv.writer(file, delimiter=',')
+        writer.writerow(['envLoss', 'bestFit'])
+        for i in range(epochs):
+            writer.writerow([resultsEnv[i], resultsBest[i]])
