@@ -33,7 +33,6 @@ class OnePlusOne():
                 card -=1
             cardsRemainingLen -=1
 
-
     @staticmethod
     def getRandomSet(set1, set2):
         if random.randint(0,1) == 0:
@@ -61,7 +60,6 @@ class OnePlusOne():
             self.b[card] = True
         elif self.b[card] is True:
             self.b[card] = False
-            self.a[card] = True
         else:
             self.a[card] = True
 
@@ -99,7 +97,6 @@ class EnvironmentOnePlusOne():
     def lossTop(self):
         return self.population[0].loss(self.A, self.B)
 
-
     def sort(self):
         self.population.sort(key=lambda x: x.loss(self.A, self.B), reverse=False)
 
@@ -123,12 +120,14 @@ if __name__ == '__main__':
     epochs = 50
     resultsEnv = []
     resultsBest = []
+    resultsBestLoss = []
     env = EnvironmentOnePlusOne(50, 15, 30)
     env.sort()
     for i in range (epochs):
         env.mutation()
         resultsEnv.append(env.loss())
         resultsBest.append(env.population[0])
+        resultsBestLoss.append(env.lossTop())
         env.sort()
         print(env.loss())
 
@@ -136,6 +135,6 @@ if __name__ == '__main__':
     print(env.lossTop())
     with open('onePlusOne.csv', mode='w') as file:
         writer = csv.writer(file, delimiter=',')
-        writer.writerow(['envLoss', 'bestFit'])
+        writer.writerow(['envLoss', 'bestFit', 'bestFitLoss'])
         for i in range(epochs):
-            writer.writerow([resultsEnv[i], resultsBest[i]])
+            writer.writerow([resultsEnv[i], resultsBest[i], resultsBestLoss[i]])
