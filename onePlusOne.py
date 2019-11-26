@@ -145,9 +145,9 @@ def runTest():
 
     with open('onePlusOneTest.csv', mode='w') as file:
         writer = csv.writer(file, delimiter=',')
-        writer.writerow(['envLoss', 'Iteration', 'bestFitLoss'])
+        writer.writerow(['envLoss', 'Iteration', 'bestFitLoss', 'AB'])
         for i in range(len(AB)):
-            writer.writerow([resultsEnv[i]/repeat, resultsBestId[i]/repeat, resultsBestLoss[i]/repeat])
+            writer.writerow([resultsEnv[i]/repeat, resultsBestId[i]/repeat, resultsBestLoss[i]/repeat, AB[i]])
 
 def simpleTest():
     epochs = 50
