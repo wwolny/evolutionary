@@ -95,7 +95,39 @@ class Environment():
     def lossTop(self):
         return self.population[0].loss(self.A, self.B)
 
-if __name__ == '__main__':
+
+def runTest():
+    repeat = 10
+    AB = [[15,30], [1,20], [1,2], [13,11], [9,37], [50,10], [0,12]]
+    epochs = 50
+    resultsEnv = [0]*len(AB)
+    resultsBestId = [0]*len(AB)
+    resultsBestLoss = [0]*len(AB)
+    for k in range(repeat):
+        for j in range(len(AB)):
+            env = Environment(miSize=20, lambdaSize=30, A=AB[j][0], B=AB[j][1])
+            finished =False
+            for i in range (epochs):
+                env.crossover()
+                env.mutation()
+                env.selection()
+                if env.lossTop() == 0.0:
+                    resultsEnv[j] += env.loss()
+                    resultsBestId[j] += i
+                    resultsBestLoss[j] += env.lossTop()
+                    finished =True
+                    break;
+            if not finished:
+                resultsEnv[j] += env.loss()
+                resultsBestId[j] += epochs-1
+                resultsBestLoss[j] += env.lossTop()
+    with open('miPlusLambdaTest.csv', mode='w') as file:
+        writer = csv.writer(file, delimiter=',')
+        writer.writerow(['envLoss', 'Iteration', 'bestFitLoss'])
+        for i in range(len(AB)):
+            writer.writerow([resultsEnv[i]/repeat, resultsBestId[i]/repeat, resultsBestLoss[i]/repeat])
+
+def simpleTest():
     epochs = 50
     resultsEnv = []
     resultsBest = []
@@ -115,3 +147,8 @@ if __name__ == '__main__':
         writer.writerow(['envLoss', 'bestFit', 'bestFitLoss'])
         for i in range(epochs):
             writer.writerow([resultsEnv[i], resultsBest[i], resultsBestLoss[i]])
+
+
+if __name__ == '__main__':
+    runTest()
+    # simpleTest()
