@@ -1,4 +1,3 @@
-##Wojciech Wolny OnePlusOne
 import random
 import math
 import csv
@@ -118,7 +117,7 @@ class EnvironmentOnePlusOne():
 
 
 def runTest():
-    repeat = 10
+    repeat = 1000
     AB = [[15,30], [1,20], [1,2], [13,11], [9,37], [50,10], [0,12]]
     epochs = 50
     resultsEnv = [0]*len(AB)
@@ -126,7 +125,7 @@ def runTest():
     resultsBestLoss = [0]*len(AB)
     for k in range(repeat):
         for j in range(len(AB)):
-            env = EnvironmentOnePlusOne(50, AB[j][0], AB[j][1])
+            env = EnvironmentOnePlusOne(15, AB[j][0], AB[j][1])
             env.sort()
             finished =False
             for i in range(epochs):
@@ -154,18 +153,15 @@ def simpleTest():
     resultsEnv = []
     resultsBest = []
     resultsBestLoss = []
-    env = EnvironmentOnePlusOne(50, 15, 30)
+    env = EnvironmentOnePlusOne(15, 5, 50)
     env.sort()
-    for i in range (epochs):
-        env.mutation()
+    for i in range (0, epochs):
         resultsEnv.append(env.loss())
         resultsBest.append(env.population[0])
         resultsBestLoss.append(env.lossTop())
+        env.mutation()
         env.sort()
-        print(env.loss())
 
-    print(env.population[0])
-    print(env.lossTop())
     with open('onePlusOne.csv', mode='w') as file:
         writer = csv.writer(file, delimiter=',')
         writer.writerow(['envLoss', 'bestFit', 'bestFitLoss'])
@@ -175,4 +171,4 @@ def simpleTest():
 
 if __name__ == '__main__':
     runTest()
-    # simpleTest()
+    simpleTest()

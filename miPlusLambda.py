@@ -66,6 +66,7 @@ class Environment():
         self.A, self.B = A, B
         self.population = [Individual() for i in range(miSize)]
         self.children = []
+        self.sort()
 
     def loss(self):
         loss = 0
@@ -97,7 +98,7 @@ class Environment():
 
 
 def runTest():
-    repeat = 10
+    repeat = 1000
     AB = [[15,30], [1,20], [1,2], [13,11], [9,37], [50,10], [0,12]]
     epochs = 50
     resultsEnv = [0]*len(AB)
@@ -105,7 +106,7 @@ def runTest():
     resultsBestLoss = [0]*len(AB)
     for k in range(repeat):
         for j in range(len(AB)):
-            env = Environment(miSize=20, lambdaSize=30, A=AB[j][0], B=AB[j][1])
+            env = Environment(miSize=10, lambdaSize=15, A=AB[j][0], B=AB[j][1])
             finished =False
             for i in range (epochs):
                 env.crossover()
@@ -132,16 +133,15 @@ def simpleTest():
     resultsEnv = []
     resultsBest = []
     resultsBestLoss = []
-    env = Environment(miSize=20, lambdaSize=30, A=15, B=20)
-    for i in range (epochs):
-        env.crossover()
-        env.mutation()
-        env.selection()
+    env = Environment(miSize=10, lambdaSize=15, A=5, B=50)
+    for i in range (0, epochs):
         resultsEnv.append(env.loss())
         resultsBest.append(env.population[0])
         resultsBestLoss.append(env.lossTop())
-        print(env.population[0].loss(15, 20))
-    print(env.population[0])
+        env.crossover()
+        env.mutation()
+        env.selection()
+
     with open('miPlusLambda.csv', mode='w') as file:
         writer = csv.writer(file, delimiter=',')
         writer.writerow(['envLoss', 'bestFit', 'bestFitLoss'])
@@ -151,4 +151,4 @@ def simpleTest():
 
 if __name__ == '__main__':
     runTest()
-    # simpleTest()
+    simpleTest()
